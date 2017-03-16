@@ -6,7 +6,7 @@ DECLARE
 	contrata_emp  	VARCHAR2(20);
 	numerito		VARCHAR2(100);
 BEGIN
-        ide:=101;
+        ide:=150;
 		consulta_emp(ide,nombre_emp,apellido_emp,salario_emp,contrata_emp,numerito);
 		DBMS_OUTPUT.PUT_LINE('Su ID es: '||ide||'.');
 		DBMS_OUTPUT.PUT_LINE('Su nombre es: '||nombre_emp||' '||apellido_emp||'.');

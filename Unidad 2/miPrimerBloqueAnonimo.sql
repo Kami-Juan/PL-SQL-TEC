@@ -12,15 +12,15 @@ IS
 		INTO   id, nombre, apellido, salario,contrata,numero
 		FROM Employees
 		WHERE employee_id = id;
-		--condicional del formato de teléfono de estados unidos
-		IF LENGTH(numero) = 18 THEN
-		numero := REPLACE(numero,'.','');
-		numero := '+'||SUBSTR(numero,1,3)||'('||SUBSTR(numero,4,2)||')'||SUBSTR(numero
-			,6,4)||'-'||SUBSTR(numero,10);
+		numero:= REPLACE(numero,'.','');
 		--condicional del formato de México
-		ELSE
-		numero := REPLACE(numero,'.','');
+		IF LENGTH(numero) <= 10 THEN
 		numero := '+521('||SUBSTR(numero,1,3)||')'||SUBSTR(numero,4,3)||'-'||SUBSTR(numero
 			,7);
+		--condicional del formato de teléfono de estados unidos
+		ELSE
+		--num_phone := '+' || SUBSTR(num_phone,1,2) ||' ' || SUBSTR(num_phone,3,1) ||' (' || SUBSTR(num_phone,4,3) ||')'||' '||SUBSTR(num_phone,7,3)||'-'||SUBSTR(num_phone,10,4);
+		numero := '+'||SUBSTR(numero,1,2)||' '||SUBSTR(numero,3,1)||' ('||SUBSTR(numero,4,3)||') '||SUBSTR(numero
+			,7,3)||'-'||SUBSTR(numero,10,4);
 		END IF;
 END;
