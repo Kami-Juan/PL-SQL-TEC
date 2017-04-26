@@ -1,0 +1,86 @@
+create or replace PACKAGE funcionesDescuento IS
+
+     FUNCTION salarySub10(salario  IN  NUMBER) RETURN NUMBER;
+     FUNCTION salarySub30(salario  IN  NUMBER) RETURN NUMBER;
+
+END funcionesDescuento;
+
+create or replace PACKAGE BODY FUNCIONESDESCUENTO IS
+FUNCTION salarySub10
+(salario  IN  NUMBER)
+RETURN NUMBER IS
+descuento NUMBER := 0;
+BEGIN
+    descuento :=
+        CASE
+            WHEN salario > 5000 AND salario < 10000 THEN salario-(salario*.10)
+            ELSE salario
+
+        END;
+    RETURN descuento;
+END salarySub10;
+FUNCTION salarySub30
+(salario  IN  NUMBER)
+RETURN NUMBER IS
+descuento NUMBER := 0;
+BEGIN
+    descuento :=
+        CASE
+            WHEN salario > 10000 THEN salario - (salario*.30)
+            ELSE salario
+
+        END;
+    RETURN descuento;
+END salarySub30;
+END FUNCIONESDESCUENTO;
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+create or replace PACKAGE procedimientoDifEmp IS
+
+     PROCEDURE empleadoVeterano
+(
+    idEmp    IN   OUT JOB_HISTORY.EMPLOYEE_ID%type,
+    job_ide   IN   OUT JOB_HISTORY.JOB_ID%TYPE,
+    depEmp   IN   OUT JOB_HISTORY.DEPARTMENT_ID%TYPE,
+    puesto  IN OUT JOBS.JOB_TITLE%TYPE
+    );
+
+END procedimientoDifEmp;
+
+create or replace PACKAGE BODY PROCEDIMIENTODIFEMP IS
+PROCEDURE empleadoVeterano
+(
+    idEmp    IN   OUT JOB_HISTORY.EMPLOYEE_ID%type,
+    job_ide   IN   OUT JOB_HISTORY.JOB_ID%TYPE,
+    depEmp   IN   OUT JOB_HISTORY.DEPARTMENT_ID%TYPE,
+    puesto  IN OUT JOBS.JOB_TITLE%TYPE
+    )
+IS
+CURSOR empleadoCambiante IS
+      SELECT job_id, employee_id, department_id
+      FROM job_history
+      MINUS
+      SELECT job_id, employee_id, department_id
+      FROM  employees;
+     BEGIN
+        OPEN empleadoCambiante;
+            LOOP
+                FETCH empleadoCambiante INTO job_ide,idEmp, depEmp;
+                EXIT WHEN empleadoCambiante%NOTFOUND;
+                   SELECT Job_title
+                   INTO puesto
+                   FROM Jobs
+                   WHERE Job_id=job_ide;
+                       DBMS_OUTPUT.PUT_LINE('id del trabajo: ' || job_ide);
+                       DBMS_OUTPUT.PUT_LINE('id del empleado: ' || idEmp);
+                       DBMS_OUTPUT.PUT_LINE('Departamento del empleado: ' || depEmp);
+                       DBMS_OUTPUT.PUT_LINE('Puesto del trabajador: ' || puesto);
+                       DBMS_OUTPUT.PUT_LINE('');
+            END LOOP;
+        CLOSE empleadoCambiante;
+     END empleadoVeterano;
+END PROCEDIMIENTODIFEMP;
